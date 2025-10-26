@@ -1,40 +1,29 @@
 package com.learn.kotlinapp.tools
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
-import android.os.Bundle
 import android.os.Environment
-import androidx.core.app.ActivityCompat
-import androidx.activity.ComponentActivity
-import androidx.core.content.ContextCompat
 import android.util.Log
 import java.io.File
 
-open class VibeRecorder : ComponentActivity() {
+class VibeRecorder(private val context: Context) {
 
     private var mediaRecorder: MediaRecorder? = null
     private var outputFile: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Request permission at runtime for Android 6.0+
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+    fun startRecording() {
+        // ✅ Check permission directly from Context
+        if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                200
-            )
+            Log.e("VibeRecorder", "❌ Missing RECORD_AUDIO permission!")
+            return
         }
-    }
 
-    fun startRecording() {
-        // Where to save the recording
         val audioFile = File(
-            getExternalFilesDir(Environment.DIRECTORY_MUSIC),
+            context.getExternalFilesDir(Environment.DIRECTORY_MUSIC),
             "audio_record_${System.currentTimeMillis()}.mp3"
         )
         outputFile = audioFile.absolutePath
@@ -50,7 +39,7 @@ open class VibeRecorder : ComponentActivity() {
             start()
         }
 
-        Log.v( "vibe recorder","🎙️ Recording started... Saving to: $outputFile")
+        Log.v("VibeRecorder", "🎙️ Recording started... Saving to: $outputFile")
     }
 
     fun stopRecording() {
@@ -60,11 +49,6 @@ open class VibeRecorder : ComponentActivity() {
             release()
         }
         mediaRecorder = null
-        println("🛑 Recording stopped. File saved at: $outputFile")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        stopRecording()
+        Log.v("VibeRecorder", "🛑 Recording stopped. File saved at: $outputFile")
     }
 }
