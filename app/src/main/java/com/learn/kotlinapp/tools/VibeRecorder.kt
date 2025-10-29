@@ -28,7 +28,7 @@ class VibeRecorder(private val context: Context) {
         )
         outputFile = audioFile.absolutePath
 
-        mediaRecorder = MediaRecorder().apply {
+        mediaRecorder = MediaRecorder(context).apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)

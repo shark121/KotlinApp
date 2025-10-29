@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.learn.kotlinapp"
-        minSdk = 24
+        minSdk = 31
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -42,6 +42,9 @@ android {
 }
 
 dependencies {
+//    implementation("org.intel.openvino:openvino-android:2024.0.0")
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
